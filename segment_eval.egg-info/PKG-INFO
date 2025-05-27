@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: segment-eval
+Version: 0.5.0
+Summary: Salient obj segmentation evaluation tools (includes custom saliency models)
+Home-page: https://github.com/TessaChessnoe/sal-segment-eval
+Author: Tessa Chessnoe
+Author-email: you@example.com
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Requires-Dist: numpy
+Requires-Dist: opencv-contrib-python
+Requires-Dist: scikit-image

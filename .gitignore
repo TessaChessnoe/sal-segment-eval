@@ -1,0 +1,6 @@
+# Directories:
+data/
+stats/results
+app/models/pysal_models
+segment_eval.egg-info/
+

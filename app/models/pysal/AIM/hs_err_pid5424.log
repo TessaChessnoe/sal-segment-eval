@@ -1,0 +1,408 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 1048576 bytes. Error detail: AllocateHeap
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   This process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:44), pid=5424, tid=23376
+#
+# JRE version:  (23.0.1+11) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (23.0.1+11-39, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Xrs 
+
+Host: AMD Ryzen 7 8845HS w/ Radeon 780M Graphics, 16 cores, 15G,  Windows 11 , 64 bit Build 26100 (10.0.26100.3912)
+Time: Fri May 23 12:08:03 2025 Eastern Daylight Time elapsed time: 1.258699 seconds (0d 0h 0m 1s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001a2022b4780):  JavaThread "Unknown thread" [_thread_in_vm, id=23376, stack(0x00000057f7c00000,0x00000057f7e00000) (2048K)]
+
+Stack: [0x00000057f7c00000,0x00000057f7e00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  0x00007ffa7b2908b9  (no source info available)
+C  0x00007ffa7b42dc83  (no source info available)
+C  0x00007ffa7b43010e  (no source info available)
+C  0x00007ffa7b4307e3  (no source info available)
+C  0x00007ffa7ae2aee6  (no source info available)
+C  0x00007ffa7ac66a17  (no source info available)
+C  0x00007ffa7aed6ad8  (no source info available)
+C  0x00007ffa7b3f4319  (no source info available)
+C  0x00007ffa7af69848  (no source info available)
+C  0x00007ffa7b3dd14c  (no source info available)
+C  0x00007ffa7b004d4e  (no source info available)
+C  0x00007ffa7b006bd1  (no source info available)
+C  [liboctinterp-13.dll+0x3fe69d]  (no source info available)
+C  [liboctinterp-13.dll+0x3ff3f5]  (no source info available)
+C  [liboctinterp-13.dll+0x3ff99e]  (no source info available)
+C  [liboctinterp-13.dll+0x4db1cc]  (no source info available)
+C  [liboctinterp-13.dll+0x391f23]  (no source info available)
+C  [liboctinterp-13.dll+0x3d6870]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4b3209]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4dfe51]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e1f3a]  (no source info available)
+C  [liboctinterp-13.dll+0x439d94]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4b3209]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4dfe51]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e9480]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e1f3a]  (no source info available)
+C  [liboctinterp-13.dll+0x439d94]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4def54]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe94a]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4b3209]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e1f3a]  (no source info available)
+C  [liboctinterp-13.dll+0x439d94]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4db72e]  (no source info available)
+C  [liboctinterp-13.dll+0x4390c2]  (no source info available)
+C  [liboctinterp-13.dll+0x4e11ca]  (no source info available)
+C  [liboctinterp-13.dll+0x48ad52]  (no source info available)
+C  [liboctinterp-13.dll+0x81b738]  (no source info available)
+C  [liboctinterp-13.dll+0x81b88f]  (no source info available)
+C  [liboctinterp-13.dll+0x8290d9]  (no source info available)
+C  [liboctinterp-13.dll+0x829790]  (no source info available)
+C  [liboctinterp-13.dll+0x4db437]  (no source info available)
+C  [liboctinterp-13.dll+0x391f23]  (no source info available)
+C  [liboctinterp-13.dll+0x3d6870]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e8842]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e1f3a]  (no source info available)
+C  [liboctinterp-13.dll+0x439d94]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e1f3a]  (no source info available)
+C  [liboctinterp-13.dll+0x439d94]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e9480]  (no source info available)
+C  [liboctinterp-13.dll+0x4e982f]  (no source info available)
+C  [liboctinterp-13.dll+0x4d2a1f]  (no source info available)
+C  [liboctinterp-13.dll+0x4e1f3a]  (no source info available)
+C  [liboctinterp-13.dll+0x439d94]  (no source info available)
+C  [liboctinterp-13.dll+0x4fe9e4]  (no source info available)
+C  [liboctinterp-13.dll+0xb0beda]  (no source info available)
+C  [liboctinterp-13.dll+0x4e98c6]  (no source info available)
+...<more frames>...
+
+Lock stack of current Java thread (top to bottom):
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ffa7b7a3618, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+Total: 0
+
+Other Threads:
+
+=>0x000001a2022b4780 (exited) JavaThread "Unknown thread"    [_thread_in_vm, id=23376, stack(0x00000057f7c00000,0x00000057f7e00000) (2048K)]
+Total: 1
+
+Threads with active compile tasks:
+Total: 0
+
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x0000000000000000, size: 0 MB, Compressed Oops mode: 32-bit
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 4 size 8 Array Of Cards #cards 16 size 48 Howl #buckets 8 coarsen threshold 3686 Howl Bitmap #cards 512 size 80 coarsen threshold 460 Card regions per heap region 1 cards per card region 4096
+
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.008 Loaded shared library C:\Program Files\Java\jdk-23\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes loaded (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Memory protections (0 events):
+No events
+
+Nmethod flushes (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff7419e0000 - 0x00007ff7419ef000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\octave-gui.exe
+0x00007ffb72960000 - 0x00007ffb72bc6000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffb70b50000 - 0x00007ffb70c19000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffb6fde0000 - 0x00007ffb701ac000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffb705d0000 - 0x00007ffb7071b000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffa947e0000 - 0x00007ffa9563f000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\liboctave-12.dll
+0x00007ffa93790000 - 0x00007ffa947dd000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\liboctinterp-13.dll
+0x00007ffb0d5f0000 - 0x00007ffb0d81a000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libstdc++-6.dll
+0x00007ffb4d910000 - 0x00007ffb4d93c000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgcc_s_seh-1.dll
+0x00007ffb709e0000 - 0x00007ffb70a92000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffb718b0000 - 0x00007ffb71959000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffb3d150000 - 0x00007ffb3d170000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\liboctmex-1.dll
+0x00007ffb71de0000 - 0x00007ffb71e0b000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffb6fdb0000 - 0x00007ffb6fdd7000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffb70aa0000 - 0x00007ffb70b46000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffb49300000 - 0x00007ffb49317000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libwinpthread-1.dll
+0x00007ffb6fc70000 - 0x00007ffb6fda2000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffb727f0000 - 0x00007ffb72906000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffb701b0000 - 0x00007ffb70253000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffa98900000 - 0x00007ffa98c2f000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgfortran-5.dll
+0x00007ffb71ba0000 - 0x00007ffb71d6a000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffb710d0000 - 0x00007ffb717fd000 	C:\WINDOWS\System32\SHELL32.dll
+0x00007ffb70450000 - 0x00007ffb705c4000 	C:\WINDOWS\System32\wintypes.dll
+0x00007ffb34a20000 - 0x00007ffb34a6c000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgomp-1.dll
+0x00007ffb70d40000 - 0x00007ffb710c4000 	C:\WINDOWS\System32\combase.dll
+0x00007ffb2ef40000 - 0x00007ffb2efac000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libGraphicsMagick++-12.dll
+0x00007ffb0c980000 - 0x00007ffb0cab8000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libGraphicsMagick-3.dll
+0x00007ffb3d170000 - 0x00007ffb3d189000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libamd.dll
+0x00007ffb34a00000 - 0x00007ffb34a16000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libccolamd.dll
+0x00007ffb725c0000 - 0x00007ffb72629000 	C:\WINDOWS\System32\SHLWAPI.dll
+0x00007ffb3d130000 - 0x00007ffb3d141000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libcolamd.dll
+0x00007ffb70890000 - 0x00007ffb70904000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffb2eea0000 - 0x00007ffb2eedb000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libcxsparse.dll
+0x00007ffb0c720000 - 0x00007ffb0c977000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libcholmod.dll
+0x00007ffb2eee0000 - 0x00007ffb2ef34000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libarpack-2.dll
+0x00007ffb6f9d0000 - 0x00007ffb6f9f6000 	C:\WINDOWS\SYSTEM32\bcrypt.dll
+0x00007ffa39f10000 - 0x00007ffa3bcd7000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libblas.dll
+0x00007ffb0d530000 - 0x00007ffb0d5e7000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libcurl-4.dll
+0x00007ffb6faf0000 - 0x00007ffb6fc67000 	C:\WINDOWS\System32\CRYPT32.dll
+0x00007ffb72630000 - 0x00007ffb726a4000 	C:\WINDOWS\System32\WLDAP32.dll
+0x00007ffb0d4d0000 - 0x00007ffb0d527000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libfontconfig-1.dll
+0x00007ffb0c670000 - 0x00007ffb0c718000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libfreetype-6.dll
+0x00007ffb34a70000 - 0x00007ffb34b61000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libiconv-2.dll
+0x00007ffa98540000 - 0x00007ffa988fd000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libfftw3-3.dll
+0x00007ffa98140000 - 0x00007ffa98539000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\liboctgui-13.dll
+0x00007ffb0b6b0000 - 0x00007ffb0b712000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libquadmath-0.dll
+0x00007ffb0b630000 - 0x00007ffb0b6a3000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libpcre2-8-0.dll
+0x00007ffb0b600000 - 0x00007ffb0b621000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libqrupdate-1.dll
+0x00007ffb349d0000 - 0x00007ffb349f3000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgl2ps.dll
+0x00007ffb64090000 - 0x00007ffb640bd000 	C:\WINDOWS\SYSTEM32\GLU32.dll
+0x00007ffb0b570000 - 0x00007ffb0b5c2000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libreadline8.dll
+0x00007ffa93390000 - 0x00007ffa9378e000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libfftw3f-3.dll
+0x00007ffb58b20000 - 0x00007ffb58c2c000 	C:\WINDOWS\SYSTEM32\OPENGL32.dll
+0x00007ffb4d900000 - 0x00007ffb4d90d000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libsuitesparseconfig.dll
+0x00007ffb0b5d0000 - 0x00007ffb0b5f5000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libz.dll
+0x00007ffb3f380000 - 0x00007ffb3f38d000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libxerbla.dll
+0x00007ffb0b550000 - 0x00007ffb0b56b000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libbz2.dll
+0x00007ffa92d50000 - 0x00007ffa931b3000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libhdf5.dll
+0x00007ffb0b530000 - 0x00007ffb0b543000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libltdl-7.dll
+0x00007ffa980c0000 - 0x00007ffa98132000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libspqr.dll
+0x00007ffa97fc0000 - 0x00007ffa980b1000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libumfpack.dll
+0x00007ffa95f50000 - 0x00007ffa95fae000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\liblcms2-2.dll
+0x00007ffa925f0000 - 0x00007ffa92d44000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\liblapack.dll
+0x00007ffb0b510000 - 0x00007ffb0b527000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libcamd.dll
+0x00007ffa95f00000 - 0x00007ffa95f43000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libidn2-0.dll
+0x00007ffa92590000 - 0x00007ffa925e8000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libnettle-8.dll
+0x00007ffaa2cb0000 - 0x00007ffaa2cde000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libexpat-1.dll
+0x00007ffa95db0000 - 0x00007ffa95dea000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libintl-8.dll
+0x00007ffa95ec0000 - 0x00007ffa95f00000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libpng16-16.dll
+0x00007ffa95e90000 - 0x00007ffa95ec0000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgsasl-18.dll
+0x00007ffa923a0000 - 0x00007ffa9258b000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgnutls-30.dll
+0x00007ffaa2ce0000 - 0x00007ffaa2d6d000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6Help.dll
+0x00007ffa931c0000 - 0x00007ffa93387000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6Network.dll
+0x00007ffb719f0000 - 0x00007ffb71b8f000 	C:\WINDOWS\System32\ole32.dll
+0x00007ffa96020000 - 0x00007ffa960b1000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6OpenGL.dll
+0x00007ffb0c650000 - 0x00007ffb0c666000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6OpenGLWidgets.dll
+0x00007ffa95fb0000 - 0x00007ffa96016000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6PrintSupport.dll
+0x00007ffb70c40000 - 0x00007ffb70d34000 	C:\WINDOWS\System32\comdlg32.dll
+0x00007ffb726c0000 - 0x00007ffb727af000 	C:\WINDOWS\System32\shcore.dll
+0x00007ffa95d70000 - 0x00007ffa95dae000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libssh2-1.dll
+0x00007ffa842d0000 - 0x00007ffa84892000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6Core.dll
+0x00007ffb2f290000 - 0x00007ffb2f29e000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libtermcap.dll
+0x00007ffa92010000 - 0x00007ffa9239d000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\qscintilla2_qt6.dll
+0x00007ffa837d0000 - 0x00007ffa84103000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6Gui.dll
+0x00007ffa91fd0000 - 0x00007ffa9200c000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libidn-12.dll
+0x00007ffa91110000 - 0x00007ffa912a9000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgcrypt-20.dll
+0x00007ffa90ee0000 - 0x00007ffa91105000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libunistring-5.dll
+0x00007ffaa4a70000 - 0x00007ffaa4a88000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libntlm-0.dll
+0x00007ffb6f3f0000 - 0x00007ffb6f420000 	C:\WINDOWS\SYSTEM32\ncrypt.dll
+0x00007ffa91f30000 - 0x00007ffa91f7a000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libhogweed-6.dll
+0x00007ffa91f80000 - 0x00007ffa91fcf000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6Sql.dll
+0x00007ffa91eb0000 - 0x00007ffa91f2e000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgmp-10.dll
+0x00007ffb6e2e0000 - 0x00007ffb6e407000 	C:\WINDOWS\SYSTEM32\DNSAPI.dll
+0x00007ffb6e2a0000 - 0x00007ffb6e2d3000 	C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+0x00007ffb6c690000 - 0x00007ffb6c69d000 	C:\WINDOWS\SYSTEM32\Secur32.dll
+0x00007ffb68f90000 - 0x00007ffb690ae000 	C:\WINDOWS\SYSTEM32\WINHTTP.dll
+0x00007ffa8e5c0000 - 0x00007ffa8e6e0000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libzstd.dll
+0x00007ffa90eb0000 - 0x00007ffa90ed1000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libtasn1-6.dll
+0x00007ffb5b330000 - 0x00007ffb5b3e4000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.1882_none_87f34cef7a28f535\COMCTL32.dll
+0x00007ffb3b7f0000 - 0x00007ffb3b8a9000 	C:\WINDOWS\SYSTEM32\WINSPOOL.DRV
+0x00007ffa83150000 - 0x00007ffa837c3000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\Qt6Widgets.dll
+0x00007ffb6e460000 - 0x00007ffb6e4b0000 	C:\WINDOWS\SYSTEM32\AUTHZ.dll
+0x00007ffb6efe0000 - 0x00007ffb6f00b000 	C:\WINDOWS\SYSTEM32\USERENV.dll
+0x00007ffb51210000 - 0x00007ffb5122a000 	C:\WINDOWS\SYSTEM32\NETAPI32.dll
+0x00007ffb68760000 - 0x00007ffb6876b000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffb4d8a0000 - 0x00007ffb4d8c1000 	C:\WINDOWS\SYSTEM32\MPR.dll
+0x00007ffb62a70000 - 0x00007ffb62aa6000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffa8e550000 - 0x00007ffa8e5b9000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libpcre2-16-0.dll
+0x00007ffb6c8a0000 - 0x00007ffb6c8e7000 	C:\WINDOWS\SYSTEM32\dxcore.dll
+0x00007ffb6b100000 - 0x00007ffb6b366000 	C:\WINDOWS\SYSTEM32\d3d11.dll
+0x00007ffa90e80000 - 0x00007ffa90ea3000 	C:\WINDOWS\SYSTEM32\d3d12.dll
+0x00007ffb6b370000 - 0x00007ffb6b5d9000 	C:\WINDOWS\SYSTEM32\DWrite.dll
+0x00007ffb6c960000 - 0x00007ffb6ca93000 	C:\WINDOWS\SYSTEM32\dxgi.dll
+0x00007ffb6c7a0000 - 0x00007ffb6c84f000 	C:\WINDOWS\SYSTEM32\UxTheme.dll
+0x00007ffa8e510000 - 0x00007ffa8e54d000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libgpg-error-0.dll
+0x00007ffb6f730000 - 0x00007ffb6f787000 	C:\WINDOWS\SYSTEM32\cfgmgr32.dll
+0x00007ffb6cac0000 - 0x00007ffb6caf6000 	C:\WINDOWS\SYSTEM32\dwmapi.dll
+0x00007ffb6ebc0000 - 0x00007ffb6ec08000 	C:\WINDOWS\SYSTEM32\SSPICLI.DLL
+0x00007ffa97fa0000 - 0x00007ffa97fba000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\libdouble-conversion.dll
+0x00007ffa8c200000 - 0x00007ffa8c447000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\icuuc76.dll
+0x00007ffa380a0000 - 0x00007ffa39f0e000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\icudt76.dll
+0x00007ffa82d00000 - 0x00007ffa83148000 	C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin\icuin76.dll
+0x00007ffb6f200000 - 0x00007ffb6f20c000 	C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+0x00007ffb6e290000 - 0x00007ffb6e29d000 	C:\WINDOWS\SYSTEM32\NETUTILS.DLL
+0x00007ffb55000000 - 0x00007ffb55029000 	C:\WINDOWS\SYSTEM32\SRVCLI.DLL
+0x00007ffb722a0000 - 0x00007ffb722d0000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ffb6f3a0000 - 0x00007ffb6f3df000 	C:\WINDOWS\SYSTEM32\NTASN1.dll
+0x00007ffb703b0000 - 0x00007ffb70449000 	C:\WINDOWS\System32\bcryptprimitives.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.1882_none_87f34cef7a28f535;C:\PROGRA~1\GNUOCT~1\OCTAVE~1.0\mingw64\qt6\plugins\platforms;C:\ProgramData\A-Volute\A-Volute.Nahimic\Modules\Scheduled\x64;C:\PROGRA~1\GNUOCT~1\OCTAVE~1.0\mingw64\qt6\plugins\styles;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\lib\octave\10.1.0\oct\x86_64-w64-mingw32;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\lib\octave\packages\image-2.16.0\x86_64-w64-mingw32-api-v60;C:\Program Files\Java\jdk-23\bin\server;C:\Program Files\Java\jdk-23\bin
+
+VM Arguments:
+jvm_args: -Xrs 
+java_command: <unknown>
+java_class_path (initial): C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\share\octave\10.1.0\m\java\octave.jar
+Launcher Type: generic
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 2097152                                   {product} {ergonomic}
+   size_t InitialHeapSize                          = 257949696                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 4110417920                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 2097152                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 7602176                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122093568                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 121962496                              {pd product} {ergonomic}
+     bool ReduceSignalUsage                        = true                                      {product} {command line}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 4110417920                             {manageable} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+PATH=C:\Users\tches\anaconda3\envs\glaucoma-env\Lib\site-packages\cv2\../../x64/vc14/bin;C:\Users\tches\anaconda3\envs\glaucoma-env;C:\Users\tches\anaconda3\envs\glaucoma-env\Library\mingw-w64\bin;C:\Users\tches\anaconda3\envs\glaucoma-env\Library\usr\bin;C:\Users\tches\anaconda3\envs\glaucoma-env\Library\bin;C:\Users\tches\anaconda3\envs\glaucoma-env\Scripts;C:\Users\tches\anaconda3\envs\glaucoma-env\bin;C:\Users\tches\anaconda3\condabin;C:\Program Files\Python313\Scripts;C:\Program Files\Python313;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files\dotnet;C:\Program Files (x86)\ffmpeg\ffmpeg-7.1-essentials_build\bin;C:\Program Files\nodejs;C:\ProgramData\chocolatey\bin;C:\Users\tches\AppData\Roaming\Python\Python313\Scripts;C:\Program Files\Mullvad VPN\resources;C:\Program Files\PostgreSQL\17\bin;C:\Program Files\Git\cmd;C:\Users\tches\ffmpeg\ffmpeg-7.1.1-essentials_build\bin;C:\Users\tches\dev\flutter\bin;C:\tools\dart-sdk\bin;C:\Users\tches\AppData\Local\Android\Sdk\platform-tools;C:\Users\tches\Lua\bin;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Users\tches\AppData\Local\Microsoft\WindowsApps;C:\Users\tches\AppData\Roaming\npm;C:\tools\dart-sdk\bin;C:\Users\tches\AppData\Local\Pub\Cache\bin;C:\Users\tches\AppData\Local\Android\Sdk\platform-tools;C:\Users\tches\Lua\bin;.;C:\Users\tches\anaconda3\envs\glaucoma-env;C:\Users\tches\anaconda3\envs\glaucoma-env\Library\mingw-w64\bin;C:\Users\tches\anaconda3\envs\glaucoma-env\Library\usr\bin;C:\Users\tches\anaconda3\envs\glaucoma-env\Library\bin;C:\Users\tches\anaconda3\envs\glaucoma-env\Scripts;C:\Users\tches\anaconda3\envs\glaucoma-env\bin;C:\Users\tches\anaconda3\condabin;C:\Program Files\Python313\Scripts;C:\Program Files\Python313;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files\dotnet;C:\Program Files (x86)\ffmpeg\ffmpeg-7.1-essentials_build\bin;C:\Program Files\nodejs;C:\ProgramData\chocolatey\bin;C:\Users\tches\AppData\Roaming\Python\Python313\Scripts;C:\Program Files\Mullvad VPN\resources;C:\Program Files\PostgreSQL\17\bin;C:\Program Files\Git\cmd;C:\Users\tches\ffmpeg\ffmpeg-7.1.1-essentials_build\bin;C:\Users\tches\dev\flutter\bin;C:\tools\dart-sdk\bin;C:\Users\tches\AppData\Local\Android\Sdk\platform-tools;C:\Users\tches\Lua\bin;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Users\tches\AppData\Local\Microsoft\WindowsApps;C:\Users\tches\AppData\Roaming\npm;C:\tools\dart-sdk\bin;C:\Users\tches\AppData\Local\Pub\Cache\bin;C:\Users\tches\AppData\Local\Android\Sdk\platform-tools;C:\Users\tches\Lua\bin;.;C:\Program Files\Python313\Scripts\;C:\Program Files\Python313\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files\dotnet\;C:\Program Files (x86)\ffmpeg\ffmpeg-7.1-essentials_build\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Users\tches\AppData\Roaming\Python\Python313\Scripts;C:\Program Files\Mullvad VPN\resources;C:\Program Files\PostgreSQL\17\bin;C:\Program Files\Git\cmd;C:\Users\tches\ffmpeg\ffmpeg-7.1.1-essentials_build\bin;C:\Users\tches\dev\flutter\bin;C:\tools\dart-sdk\bin;C:\Users\tches\AppData\Local\Android\Sdk\platform-tools;C:\Users\tches\Lua\bin;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Users\tches\AppData\Local\Microsoft\WindowsApps;C:\Users\tches\AppData\Roaming\npm;C:\tools\dart-sdk\bin;C:\Users\tches\AppData\Local\Pub\Cache\bin;C:\Users\tches\AppData\Local\Android\Sdk\platform-tools;C:\Users\tches\Lua\bin;;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\libexec\octave\10.1.0\site\exec\x86_64-w64-mingw32;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\libexec\octave\api-v60\site\exec\x86_64-w64-mingw32;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\libexec\octave\site\exec\x86_64-w64-mingw32;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin;C:\Program Files\GNU Octave\Octave-10.1.0\mingw64\bin
+USERNAME=tches
+LANG=en_US.UTF-8
+LC_NUMERIC=C
+LC_TIME=C
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD
+TMP=C:\Users\tches\AppData\Local\Temp
+TEMP=C:\Users\tches\AppData\Local\Temp
+
+
+
+
+Periodic native trim disabled
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 11 , 64 bit Build 26100 (10.0.26100.3912)
+OS uptime: 9 days 6:15 hours
+Hyper-V role detected
+
+CPU: total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 117 stepping 2 microcode 0xa705206, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4a, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, avx512f, avx512dq, avx512cd, avx512bw, avx512vl, sha, fma, vzeroupper, avx512_vpopcntdq, avx512_vpclmulqdq, avx512_vaes, avx512_vnni, clflush, clflushopt, avx512_vbmi2, avx512_vbmi, hv, rdtscp, rdpid, fsrm, gfni, avx512_bitalg, f16c, cet_ss, avx512_ifma
+Processor Information for the first 16 processors :
+  Max Mhz: 3801, Current Mhz: 2516, Mhz Limit: 3801
+
+Memory: 4k page, system-wide physical 15674M (5513M free)
+TotalPageFile size 61478M (AvailPageFile size 12683M)
+current process WorkingSet (physical memory assigned to process): 69M, peak: 69M
+current process commit charge ("private bytes"): 2001M, peak: 2002M
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (23.0.1+11-39) for windows-amd64 JRE (23.0.1+11-39), built on 2024-09-30T07:20:43Z with MS VC++ 17.6 (VS2022)
+
+END.

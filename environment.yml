@@ -1,0 +1,19 @@
+name: segment-eval
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy
+  - matplotlib
+  - pandas
+  - tqdm
+  - scikit-learn
+  - scikit-image
+  - pip
+  - pip:
+    # Installs custom app module
+    - -e .
+    - opencv-contrib-python
+    - pycocotools
+    - pysaliency
