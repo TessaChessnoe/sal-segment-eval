@@ -3,4 +3,6 @@ data/
 stats/results
 app/models/pysal_models
 segment_eval.egg-info/
+app/models/pysal
+*/__pycache__/*
 
