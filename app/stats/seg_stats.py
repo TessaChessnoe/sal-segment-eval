@@ -15,6 +15,7 @@ from typing import List
 
 # Custom modules
 from app.models.custom_models import BMS, BMSOptimized, IttiKoch
+from app.models.u2_wrapper import U2NetWrapper
 from app.config.exp_config import ExperimentConfig
 from app.stats.stat_helpers import (
     gather_dataset,
@@ -38,6 +39,7 @@ class ModelStats:
 model_root = "app/models/pysal"
 # List detectors to calculate stats for
 DETECTORS = {
+    "U2Net": U2NetWrapper(weights_path="app/models/u2net.pth"),
     # "AIM": pys.AIM(location=model_root),
     # "SUN": pys.SUN(location=model_root),
     # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
@@ -88,20 +90,16 @@ def evaluate(cfg: ExperimentConfig):
     # 1) Load COCO dataset once
     print(">>> Gathering dataset…")
     dataset = gather_dataset(cfg.masks_json, cfg.input_dir)
-    print(f">>> Dataset size: {len(dataset)} samples\n")
 
     # 2) Prepare to record results
     stats_objs: list[ModelStats] = []
-    i = 0 # Tracks which model we're on
     random.seed(42) # Set seed for replicability in other experiments
 
     # 3) Aggregate stats for each detector
     for name, detector in DETECTORS.items():
-        i += 1
-        stats_list = [] # Collect stats for each image's computation
         start_ts = time()
 
-        # Run slow models with less samples
+        # 3a) Pick sample size & worker count
         if name in cfg.slow_models:
             # Excessive copies of SUN & AIM overallocate mem
             max_workers = 2
@@ -111,21 +109,33 @@ def evaluate(cfg: ExperimentConfig):
             max_workers = max(1, (os.cpu_count() or 1) - cfg.leave_free_cores)
             sample_data = random.sample(dataset, cfg.fast_model_n)
         
+        stats_list = []
+
         # 4) Pool saliency computations for a given detector
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = {
-                executor.submit(compute_stats, detector, img, gt_mask): fn
-                for fn, img, gt_mask in sample_data
-            }
-            # Per-model progress bar for remaining computations
-            for future in tqdm(as_completed(futures),
-                                total=len(futures),
-                                desc=f"[{i}/{len(DETECTORS)}] {name}",
-                                unit="img"):
-                # 5) Append results for each input image to list
-                img_stats = future.result()
-                if img_stats is not None:
-                    stats_list.append(img_stats)
+        # Process CPU detectors in parallel
+        if not isinstance(detector, U2NetWrapper):
+            with ThreadPoolExecutor(max_workers=max_workers) as exe:
+                futures = {
+                    exe.submit(compute_stats, detector, img, gt_mask): fn
+                    for fn, img, gt_mask in sample_data
+                }
+                # Progress bar for total computations per detector
+                pbar = tqdm(total=len(futures), desc=f"{name}", unit="img")
+                for future in tqdm(as_completed(futures)):
+                    # 5) Append results for each input image to list
+                    result = future.result()
+                    if result is not None:
+                        stats_list.append(result)
+                    pbar.update(1)
+                pbar.close()
+        # Process GPU comps sequentially
+        else:
+            pbar = tqdm(total=len(sample_data), desc=f"{name}", unit="img")
+            for fn, img, gt_mask in sample_data:
+                result = compute_stats(detector, img, gt_mask)
+                if result is not None:
+                    stats_list.append(result)
+            pbar.close()
 
         # 6) Aggregate stats across validation set
         if stats_list:
@@ -133,8 +143,10 @@ def evaluate(cfg: ExperimentConfig):
             # Compute average for each metric
             summary = {m: np.mean([s[m] for s in stats_list]).astype(np.float64)
                        for m in metrics}
+            
             end_ts = time()
             summary['time'] = np.float64(end_ts - start_ts)
+
             # Build ModelStats instance
             ms = ModelStats(
                 model = name, 
@@ -161,8 +173,8 @@ def main():
         output_dir = "app/stats/results",
         output_file = "results.csv",
         masks_json = "data/COCO/annotations/instances_val2017.json", 
-        slow_models = {"AIM", "SUN"},
-        slow_model_n = 200,
+        slow_models = {"AIM", "SUN", "U2Net"},
+        slow_model_n = 1,
         fast_model_n = 2000, 
         leave_free_cores = 2,
         csv_out = False,

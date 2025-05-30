@@ -33,3 +33,21 @@ SpectralRes (n=2000):
   dice:      0.2033
   accuracy:  0.6074
   time (s):  78.636
+
+AIM (n=400):
+  precision: 0.3702
+  recall:    0.8935
+  f1-score:  0.4602
+  iou:       0.3374
+  dice:      0.4602
+  accuracy:  0.5124
+  time (s):  9736.886
+
+SUN (n=400):
+  precision: 0.4476
+  recall:    0.1221
+  f1-score:  0.1383
+  iou:       0.0811
+  dice:      0.1383
+  accuracy:  0.6804
+  time (s):  3156.894

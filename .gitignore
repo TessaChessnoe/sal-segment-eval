@@ -6,3 +6,6 @@ segment_eval.egg-info/
 app/models/pysal
 */__pycache__/*
 
+# File types
+*.pth
+
