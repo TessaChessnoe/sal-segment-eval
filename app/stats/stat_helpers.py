@@ -46,10 +46,12 @@ def gather_dataset(coco_annotation_file: str, img_dir: str):
 
 
 def normalize_map(sal_map):
-    sal = sal_map.astype(np.float32)
-    sal -= sal.min()
-    sal /= (sal.max() + 1e-12)
-    return sal
+    map = sal_map.astype(np.float32)
+    # Compute minimum and maximum only once
+    m_min = map.min()
+    m_max = map.max()
+    # Make 0 new min, scale range of map to be 1
+    return (map - m_min) / (m_max - m_min + 1e-12)
 
 def calc_seg_stats(pred: np.ndarray, gt: np.ndarray) -> dict:
     """
@@ -63,7 +65,8 @@ def calc_seg_stats(pred: np.ndarray, gt: np.ndarray) -> dict:
     # avoid division by zero
     prec = tp / (tp + fp + 1e-12)
     rec  = tp / (tp + fn + 1e-12)
+    f1 = (2 * prec * rec) / (prec + rec + 1e-12)
     iou  = tp / (tp + fp + fn + 1e-12)
     dice = 2 * tp / (2 * tp + fp + fn + 1e-12)
     acc = (tp + tn) / (tp + tn + fp + fn + 1e-12)
-    return {'precision': prec, 'recall': rec, 'iou': iou, 'dice': dice, 'accuracy': acc}
+    return {'precision': prec, 'recall': rec, 'f1-score': f1, 'iou': iou, 'dice': dice, 'accuracy': acc}

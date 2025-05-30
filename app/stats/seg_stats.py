@@ -27,6 +27,7 @@ class ModelStats:
     n_images: int
     precision: float
     recall: float
+    f1_score: float
     iou: float
     dice: float
     accuracy: float
@@ -35,12 +36,12 @@ class ModelStats:
 model_root = "app/models/pysal"
 # List detectors to calculate stats for
 DETECTORS = {
-    "AIM": pys.AIM(location=model_root),
-    "SUN": pys.SUN(location=model_root),
+    # "AIM": pys.AIM(location=model_root),
+    # "SUN": pys.SUN(location=model_root),
     "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
     "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
-    "BMS": BMS,
-    "IKN": IttiKoch,
+    # "BMS": BMS,
+    # "IKN": IttiKoch,
 }
 
 # Compute segmentation stats for one image using the given detector
@@ -88,6 +89,7 @@ def evaluate(cfg: ExperimentConfig):
     # 2) Prepare to record results
     stats_objs: list[ModelStats] = []
     i = 0 # Tracks which model we're on
+    random.seed(42) # Set seed for replicability in other experiments
 
     # 3) Aggregate stats for each detector
     for name, detector in DETECTORS.items():
@@ -97,7 +99,7 @@ def evaluate(cfg: ExperimentConfig):
         # Run slow models with less samples
         if name in cfg.slow_models:
             # Excessive copies of SUN & AIM overallocate mem
-            max_workers = 3 
+            max_workers = 2
             sample_data = random.sample(dataset, cfg.slow_model_n)
         else:
             # Throttle threads to leave some cores free
@@ -132,6 +134,7 @@ def evaluate(cfg: ExperimentConfig):
                 n_images = len(stats_list), 
                 precision = summary['precision'], 
                 recall = summary['recall'],
+                f1_score = summary['f1-score'],
                 iou = summary['iou'],
                 dice = summary['dice'],
                 accuracy= summary['accuracy']
@@ -148,12 +151,12 @@ def evaluate(cfg: ExperimentConfig):
 def main():
     cfg = ExperimentConfig(
         input_dir = "data/COCO/val2017", 
-        output_dir = "stats/results",
+        output_dir = "app/stats/results",
         output_file = "results.csv",
         masks_json = "data/COCO/annotations/instances_val2017.json", 
         slow_models = {"AIM", "SUN"},
-        slow_model_n = 1,
-        fast_model_n = 5, 
+        slow_model_n = 200,
+        fast_model_n = 2000, 
         leave_free_cores = 2,
         csv_out = True,
     )
