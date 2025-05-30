@@ -6,6 +6,7 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 import pysaliency as pys
+from time import time
 
 # Required classes & methods
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -13,7 +14,7 @@ from dataclasses import dataclass, asdict
 from typing import List
 
 # Custom modules
-from app.models.custom_models import BMS, IttiKoch
+from app.models.custom_models import BMS, BMSOptimized, IttiKoch
 from app.config.exp_config import ExperimentConfig
 from app.stats.stat_helpers import (
     gather_dataset,
@@ -31,6 +32,7 @@ class ModelStats:
     iou: float
     dice: float
     accuracy: float
+    time: float
 
 # Download built-in models into your model_loc folder
 model_root = "app/models/pysal"
@@ -38,9 +40,9 @@ model_root = "app/models/pysal"
 DETECTORS = {
     # "AIM": pys.AIM(location=model_root),
     # "SUN": pys.SUN(location=model_root),
-    "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
-    "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
-    # "BMS": BMS,
+    # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
+    # "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
+    # "BMS": BMSOptimized,
     # "IKN": IttiKoch,
 }
 
@@ -66,9 +68,11 @@ def print_results(stats_list: List[ModelStats]):
         print(f"{ms.model} (n={ms.n_images}):")
         print(f"  precision: {ms.precision:.4f}")
         print(f"  recall:    {ms.recall:.4f}")
+        print(f"  f1-score:  {ms.f1_score:.4f}")
         print(f"  iou:       {ms.iou:.4f}")
         print(f"  dice:      {ms.dice:.4f}")
         print(f"  accuracy:  {ms.accuracy:.4f}")
+        print(f"  time (s):  {ms.time:.3f}")
         print()
 
 def results_to_csv(stats_list: List[ModelStats], output_dir: str, fname: str="model_stats.csv"):
@@ -95,6 +99,7 @@ def evaluate(cfg: ExperimentConfig):
     for name, detector in DETECTORS.items():
         i += 1
         stats_list = [] # Collect stats for each image's computation
+        start_ts = time()
 
         # Run slow models with less samples
         if name in cfg.slow_models:
@@ -128,6 +133,8 @@ def evaluate(cfg: ExperimentConfig):
             # Compute average for each metric
             summary = {m: np.mean([s[m] for s in stats_list]).astype(np.float64)
                        for m in metrics}
+            end_ts = time()
+            summary['time'] = np.float64(end_ts - start_ts)
             # Build ModelStats instance
             ms = ModelStats(
                 model = name, 
@@ -137,11 +144,11 @@ def evaluate(cfg: ExperimentConfig):
                 f1_score = summary['f1-score'],
                 iou = summary['iou'],
                 dice = summary['dice'],
-                accuracy= summary['accuracy']
+                accuracy = summary['accuracy'],
+                time  = summary['time']
             )
             # Append to final stats list
             stats_objs.append(ms)
-
     # 7) Print aggregated results
     print_results(stats_objs)
     # Output to csv if enabled
@@ -158,7 +165,7 @@ def main():
         slow_model_n = 200,
         fast_model_n = 2000, 
         leave_free_cores = 2,
-        csv_out = True,
+        csv_out = False,
     )
 
     # Calculate aggregate metrics for each detector

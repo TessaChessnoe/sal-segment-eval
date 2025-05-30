@@ -1,30 +1,35 @@
-AIM (n=200):
-  precision: 0.3242
-  recall: 0.9130
-  iou: 0.3048
-  dice: 0.4229
-SUN (n=200):
-  precision: 0.4619
-  recall: 0.1198
-  iou: 0.0792
-  dice: 0.1378
 Finegrain (n=2000):
-  precision: 0.4639
-  recall: 0.1129
-  iou: 0.0843
-  dice: 0.1479
+  precision: 0.4597
+  recall:    0.1162
+  f1-score:  0.1531
+  iou:       0.0880
+  dice:      0.1531
+  accuracy:  0.7009
+  time (s):  16.735
+
 SpectralRes (n=2000):
-  precision: 0.4993
-  recall: 0.0802
-  iou: 0.0642
-  dice: 0.1123
-BMS (n=2000):
-  precision: 0.5447
-  recall: 0.0737
-  iou: 0.0627
-  dice: 0.1063
-IKN (n=2000):
-  precision: 0.5067
-  recall: 0.0808
-  iou: 0.0643
-  dice: 0.1154
+  precision: 0.4903
+  recall:    0.0836
+  f1-score:  0.1158
+  iou:       0.0667
+  dice:      0.1158
+  accuracy:  0.7062
+  time (s):  7.853
+
+  IKN (n=2000):
+  precision: 0.5062
+  recall:    0.0800
+  f1-score:  0.1152
+  iou:       0.0643
+  dice:      0.1152
+  accuracy:  0.7051
+  time (s):  48.352
+
+  BMS (n=2000):
+  precision: 0.3372
+  recall:    0.2140
+  f1-score:  0.2033
+  iou:       0.1297
+  dice:      0.2033
+  accuracy:  0.6074
+  time (s):  78.636

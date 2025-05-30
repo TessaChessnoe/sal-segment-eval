@@ -149,58 +149,54 @@ class BMS:
             return False, None
         return True, sal_map
 
-class BMSFast:
-    """
-    Boolean Map Saliency (Fast) implementation.
-    """
-    def __init__(self):
-        pass
-
+class BMSOptimized:
     @staticmethod
-    def _activate_bool_map(bool_map: np.ndarray) -> np.ndarray:
+    def _interior_mask(binary: np.ndarray) -> np.ndarray:
         """
         Given a binary map (uint8, values 0 or 1), returns a float32
-        map of 1.0 in those connected components that do NOT touch the border.
-        Uses floodFill mask to isolate interior blobs.
+        map of 1.0 in those connected components that do NOT touch the border,
+        using a single floodFill to mark all border-connected background.
         """
-        # ensure uint8 in 0/255 for floodFill
-        im = (bool_map * 255).astype(np.uint8)
-        h, w = im.shape
+        # Scale to 0/255 for floodFill
+        im8 = (binary * 255).astype(np.uint8)
+        h, w = im8.shape
 
-        # mask for floodFill must be 2 pixels larger
+        # Create mask for floodFill (2 px padding)
         ff_mask = np.zeros((h + 2, w + 2), np.uint8)
 
-        # flood fill from top-left corner to mark border-connected background in mask
         flags = cv2.FLOODFILL_MASK_ONLY
-        cv2.floodFill(
-            im,               # input image (unused output here)
-            ff_mask,          # mask output
-            (0, 0),           # seed point
-            (1,),             # newVal ignored with MASK_ONLY, but must be Scalar
+        # Flood-fill from (0,0) to mark all border-connected background (in mask)
+        # floodFill returns: retval, image, mask, rect
+        _, _, ff_mask, _ = cv2.floodFill(
+            im8,
+            ff_mask,
+            (0, 0),     # seedPoint
+            (1,),       # newVal (ignored with MASK_ONLY)
             loDiff=(0,),
             upDiff=(0,),
-            flags=flags
+            flags=flags,
         )
 
-        # extract filled mask (remove padding): 1 marks background, 0 marks interior+foreground
-        mask = ff_mask[1:-1, 1:-1]
+        # Remove padding: mask==1 is background, mask==0 is interior+foreground
+        bg_mask = ff_mask[1:-1, 1:-1].astype(bool)
 
-        # interior blobs are where original foreground (bool_map==1) and mask==0
-        interior = (bool_map == 1) & (mask == 0)
+        # Interior salient regions are those foreground pixels not marked as bg
+        interior = (binary.astype(bool) & ~bg_mask)
         return interior.astype(np.float32)
 
     @staticmethod
     def computeSaliency(img: np.ndarray,
                         n_thresholds: int = 16,
                         lb: int = 25,
-                        ub: int = 230) -> np.ndarray:
+                        ub: int = 230) -> tuple[bool, np.ndarray | None]:
         """
-        Compute fast BMS saliency map.
-        Returns saliency map (float32 [0,1]).
+        Fast Boolean Map Saliency:
+        returns (success, saliency_map in [0,1])
         """
         if img is None:
-            raise ValueError("Input image is None")
-        # convert to grayscale uint8
+            return False, None
+
+        # 1) Grayscale 0–255 uint8
         if img.ndim == 3:
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         elif img.ndim == 2:
@@ -208,20 +204,24 @@ class BMSFast:
         else:
             raise ValueError(f"Unsupported image dimension: {img.ndim}")
 
-        # define thresholds
+        # 2) Thresholds
         thresholds = np.linspace(lb, ub, n_thresholds, endpoint=False).astype(np.uint8)
 
-        # accumulate interior detections
-        acc = np.zeros_like(gray, dtype=np.float32)
+        # 3) Accumulate interior masks
+        acc = np.zeros_like(gray, dtype=np.uint8)
         for thr in thresholds:
+            # fast C‐level threshold
             _, bm = cv2.threshold(gray, int(thr), 1, cv2.THRESH_BINARY)
-            interior = BMSFast._activate_bool_map(bm)
-            acc += interior
+            acc += BMSOptimized._interior_mask(bm).astype(np.uint8)
 
-        # smooth and normalize
-        acc = cv2.GaussianBlur(acc, (0, 0), sigmaX=3)
+        # 4) Smooth
+        # Upcast to float32 for precise blurring
+        acc = acc.astype(np.float32)
+        acc = cv2.GaussianBlur(acc, ksize=(0, 0), sigmaX=3)
+
+        # 5) Normalize
         minv, maxv = float(acc.min()), float(acc.max())
         if maxv <= minv:
-            raise RuntimeError("Saliency map has zero dynamic range; check input or thresholds.")
+            return False, None
         sal = (acc - minv) / (maxv - minv)
-        return sal.astype(np.float32)
+        return True, sal.astype(np.float32)
