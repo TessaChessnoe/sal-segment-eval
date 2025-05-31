@@ -5,9 +5,15 @@ from app.models.u2net import U2NET
 
 class U2NetWrapper:
     def __init__(self, weights_path: str, device: str = "cuda"):
+        # Load cuda version of torch
         self.device = torch.device(device)
         self.model = U2NET(3, 1).to(self.device)
-        self.model.load_state_dict(torch.load(weights_path, map_location=self.device))
+        # Load model state
+        state = torch.load(weights_path,
+                            map_location = self.device, 
+                            weights_only = True)
+        self.model.load_state_dict(state)
+        # Enable evaluation
         self.model.eval()
 
     def computeSaliency(self, img: np.ndarray):

@@ -15,7 +15,7 @@ from typing import List
 
 # Custom modules
 from app.models.custom_models import BMS, BMSOptimized, IttiKoch
-from app.models.u2_wrapper import U2NetWrapper
+from app.models.u2net.u2_wrapper import U2NetWrapper
 from app.config.exp_config import ExperimentConfig
 from app.stats.stat_helpers import (
     gather_dataset,
@@ -135,6 +135,7 @@ def evaluate(cfg: ExperimentConfig):
                 result = compute_stats(detector, img, gt_mask)
                 if result is not None:
                     stats_list.append(result)
+                pbar.update(1)
             pbar.close()
 
         # 6) Aggregate stats across validation set
@@ -173,8 +174,8 @@ def main():
         output_dir = "app/stats/results",
         output_file = "results.csv",
         masks_json = "data/COCO/annotations/instances_val2017.json", 
-        slow_models = {"AIM", "SUN", "U2Net"},
-        slow_model_n = 1,
+        slow_models = {"AIM", "SUN"},
+        slow_model_n = 400,
         fast_model_n = 2000, 
         leave_free_cores = 2,
         csv_out = False,
