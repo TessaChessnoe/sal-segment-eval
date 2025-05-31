@@ -39,7 +39,7 @@ class ModelStats:
 model_root = "app/models/pysal"
 # List detectors to calculate stats for
 DETECTORS = {
-    "U2Net": U2NetWrapper(weights_path="app/models/u2net.pth"),
+    "U2Net": U2NetWrapper(weights_path="app/models/u2net/u2net.pth"),
     # "AIM": pys.AIM(location=model_root),
     # "SUN": pys.SUN(location=model_root),
     # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
