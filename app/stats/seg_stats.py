@@ -37,14 +37,16 @@ class ModelStats:
     time: float
 
 # Download built-in models into your model_loc folder
-pysal_root = "app/models/pysal"
+PYSAL_ROOT = "app/models/pysal"
+U2_WEIGHTS = "app/models/u2net/u2net.pth"
+SAM_WEIGHTS = "app/models/samnet/SAMNet_with_ImageNet_pretrain.pth"
 
 # List detectors to calculate stats for
 DETECTORS = {
-    # "U2Net": U2NetWrapper(weights_path="app/models/u2net/u2net.pth"),
-    "SAMNet": SAMNetWrapper(),
-    # "AIM": pys.AIM(location=pysal_root),
-    # "SUN": pys.SUN(location=pysal_root),
+    # "U2Net": U2NetWrapper(weights_path=U2_weights),
+    "SAMNet": SAMNetWrapper(weights_path=SAM_WEIGHTS),
+    # "AIM": pys.AIM(location=PYSAL_ROOT),
+    # "SUN": pys.SUN(location=PYSAL_ROOT),
     # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
     # "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
     # "BMS": BMSOptimized,

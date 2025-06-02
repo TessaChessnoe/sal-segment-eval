@@ -1,13 +1,23 @@
 import torch
 import cv2
 import numpy as np
+import os
 from app.models.u2net.u2net import U2NET
 
 class U2NetWrapper:
-    def __init__(self, weights_path: str, device: str = "cuda"):
+    def __init__(self, weights_path = None, device: str = "cuda"):
         # Load cuda version of torch
         self.device = torch.device(device)
+        # Load model onto GPU
         self.model = U2NET(3, 1).to(self.device)
+
+        # If no explicit weights_path given, default to the “official” filename
+        if weights_path is None:
+            base_dir = os.path.dirname(__file__)
+            weights_path = os.path.join(
+                base_dir, "u2net.pth"
+            )
+
         # Load model state
         state = torch.load(weights_path,
                             map_location = self.device, 

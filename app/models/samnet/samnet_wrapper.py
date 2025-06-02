@@ -85,13 +85,8 @@ class SAMNetWrapper:
 
         # 2) Forward pass (no grad)
         with torch.no_grad():
-            # Many SAMNet implementations return a 4-tuple: (sal_map, boundary, …). 
-            # Check the signature in Models/SAMNet.py. Suppose the forward call is:
-            #    sal_map, _ = self.model(inp)
-            # If the function name is different, adapt accordingly.
             out = self.model(inp)
-            # Some SAMNet versions return exactly one output. Others return two. 
-            # Let’s assume it’s `out[0]` = the saliency logits:
+            # 0th index of model output is the logits
             if isinstance(out, (list, tuple)):
                 sal_logits = out[0]
             else:
