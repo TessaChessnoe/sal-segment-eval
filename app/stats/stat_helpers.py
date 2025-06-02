@@ -70,5 +70,6 @@ def calc_seg_stats(pred: np.ndarray, gt: np.ndarray) -> dict:
     dice = 2 * tp / (2 * tp + fp + fn + 1e-12)
     acc = (tp + tn) / (tp + tn + fp + fn + 1e-12)
     time = 0
-    return {'precision': prec, 'recall': rec, 'f1-score': f1,
-            'iou': iou, 'dice': dice, 'accuracy': acc, 'time': time}
+    return {'iou': iou, 'dice': dice, 'time': time,
+             'precision': prec, 'recall': rec,
+             'f1-score': f1, 'accuracy': acc, }

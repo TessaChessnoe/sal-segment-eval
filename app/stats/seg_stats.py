@@ -28,29 +28,30 @@ from app.stats.stat_helpers import (
 class ModelStats:
     model: str
     n_images: int
+    dice: float
+    iou: float
+    time: float
     precision: float
     recall: float
     f1_score: float
-    iou: float
-    dice: float
     accuracy: float
-    time: float
 
-# Download built-in models into your model_loc folder
+# Paths for pretrained weights & model files
 PYSAL_ROOT = "app/models/pysal"
 U2_WEIGHTS = "app/models/u2net/u2net.pth"
+U2P_WEIGHTS = "app/models/u2net/u2netp.pth"
 SAM_WEIGHTS = "app/models/samnet/SAMNet_with_ImageNet_pretrain.pth"
 
 # List detectors to calculate stats for
 DETECTORS = {
-    # "U2Net": U2NetWrapper(weights_path=U2_weights),
+    "U2Net": U2NetWrapper(weights_path=U2_WEIGHTS),
     "SAMNet": SAMNetWrapper(weights_path=SAM_WEIGHTS),
-    # "AIM": pys.AIM(location=PYSAL_ROOT),
-    # "SUN": pys.SUN(location=PYSAL_ROOT),
-    # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
-    # "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
-    # "BMS": BMSOptimized,
-    # "IKN": IttiKoch,
+    "AIM": pys.AIM(location=PYSAL_ROOT),
+    "SUN": pys.SUN(location=PYSAL_ROOT),
+    "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
+    "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
+    "BMS": BMSOptimized,
+    "IKN": IttiKoch,
 }
 
 # Compute segmentation stats for one image using the given detector
@@ -157,13 +158,13 @@ def evaluate(cfg: ExperimentConfig):
             ms = ModelStats(
                 model = name, 
                 n_images = len(stats_list), 
+                dice = summary['dice'],
+                iou = summary['iou'],
+                time  = summary['time'],
                 precision = summary['precision'], 
                 recall = summary['recall'],
                 f1_score = summary['f1-score'],
-                iou = summary['iou'],
-                dice = summary['dice'],
                 accuracy = summary['accuracy'],
-                time  = summary['time']
             )
             # Append to final stats list
             stats_objs.append(ms)
@@ -181,7 +182,7 @@ def main():
         masks_json = "data/COCO/annotations/instances_val2017.json", 
         slow_models = {"AIM", "SUN"},
         slow_model_n = 400,
-        fast_model_n = 10, 
+        fast_model_n = 2000, 
         leave_free_cores = 2,
         csv_out = False,
     )

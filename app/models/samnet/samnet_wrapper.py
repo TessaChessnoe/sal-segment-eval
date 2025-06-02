@@ -23,13 +23,13 @@ class SAMNetWrapper:
             weights_only = True
         )
 
-        print("→ [DEBUG] torch.load returned object of type:", type(raw_state))
+        # print("→ [DEBUG] torch.load returned object of type:", type(raw_state))
 
-        # If it’s a dict, print its top‐level keys:
-        if isinstance(raw_state, dict):
-            print("→ [DEBUG] Top‐level keys in checkpoint:", list(raw_state.keys())[:10])
-        else:
-            print("→ [DEBUG] Loaded object is not a dict:", raw_state)
+        # # If it’s a dict, print its top‐level keys:
+        # if isinstance(raw_state, dict):
+        #     print("→ [DEBUG] Top‐level keys in checkpoint:", list(raw_state.keys())[:10])
+        # else:
+        #     print("→ [DEBUG] Loaded object is not a dict:", raw_state)
 
         # 2) Strip module header from weights dictionary
         state = {}

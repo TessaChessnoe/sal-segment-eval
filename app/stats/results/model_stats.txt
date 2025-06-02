@@ -60,3 +60,12 @@ U2Net (n=2000):
   dice:      0.4984
   accuracy:  0.7864
   time (s):  154.990
+
+SAMNet (n=2000):
+  precision: 0.6896
+  recall:    0.5948
+  f1-score:  0.5710
+  iou:       0.4519
+  dice:      0.5710
+  accuracy:  0.7944
+  time (s):  226.317
