@@ -66,9 +66,9 @@ class convbnrelu(nn.Module):
         super(convbnrelu, self).__init__()
         conv = [nn.Conv2d(in_channel, out_channel, k, s, p, dilation=d, groups=g, bias=bias)]
         if bn:
-            conv.append(nn.BatchNorm2d(out_channel))
+            conv.append(nn.BatchNorm2d(out_channel)) # type: ignore
         if relu:
-            conv.append(nn.ReLU(inplace=True))
+            conv.append(nn.ReLU(inplace=True)) # type: ignore
         self.conv = nn.Sequential(*conv)
 
     def forward(self, x):

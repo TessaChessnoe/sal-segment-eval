@@ -16,6 +16,7 @@ from typing import List
 # Custom modules
 from app.models.custom_models import BMS, BMSOptimized, IttiKoch
 from app.models.u2net.u2_wrapper import U2NetWrapper
+from app.models.samnet.samnet_wrapper import SAMNetWrapper
 from app.config.exp_config import ExperimentConfig
 from app.stats.stat_helpers import (
     gather_dataset,
@@ -36,12 +37,14 @@ class ModelStats:
     time: float
 
 # Download built-in models into your model_loc folder
-model_root = "app/models/pysal"
+pysal_root = "app/models/pysal"
+
 # List detectors to calculate stats for
 DETECTORS = {
-    "U2Net": U2NetWrapper(weights_path="app/models/u2net/u2net.pth"),
-    # "AIM": pys.AIM(location=model_root),
-    # "SUN": pys.SUN(location=model_root),
+    # "U2Net": U2NetWrapper(weights_path="app/models/u2net/u2net.pth"),
+    "SAMNet": SAMNetWrapper(),
+    # "AIM": pys.AIM(location=pysal_root),
+    # "SUN": pys.SUN(location=pysal_root),
     # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
     # "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
     # "BMS": BMSOptimized,
@@ -113,7 +116,7 @@ def evaluate(cfg: ExperimentConfig):
 
         # 4) Pool saliency computations for a given detector
         # Process CPU detectors in parallel
-        if not isinstance(detector, U2NetWrapper):
+        if not (isinstance(detector, U2NetWrapper) or isinstance(detector, SAMNetWrapper)):
             with ThreadPoolExecutor(max_workers=max_workers) as exe:
                 futures = {
                     exe.submit(compute_stats, detector, img, gt_mask): fn
@@ -176,13 +179,13 @@ def main():
         masks_json = "data/COCO/annotations/instances_val2017.json", 
         slow_models = {"AIM", "SUN"},
         slow_model_n = 400,
-        fast_model_n = 2000, 
+        fast_model_n = 10, 
         leave_free_cores = 2,
         csv_out = False,
     )
 
     # Calculate aggregate metrics for each detector
-    evaluate(cfg) # write result to csv
+    evaluate(cfg)
 
 if __name__ == '__main__':
     main()

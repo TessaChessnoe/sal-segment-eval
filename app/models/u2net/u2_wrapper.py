@@ -1,7 +1,7 @@
 import torch
 import cv2
 import numpy as np
-from app.models.u2net import U2NET
+from app.models.u2net.u2net import U2NET
 
 class U2NetWrapper:
     def __init__(self, weights_path: str, device: str = "cuda"):
