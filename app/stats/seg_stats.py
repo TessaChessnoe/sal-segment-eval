@@ -15,7 +15,7 @@ from typing import List
 
 # Custom modules
 from app.models.custom_models import BMS, BMSOptimized, IttiKoch
-from app.models.u2net.u2_wrapper import U2NetWrapper
+from app.models.u2net.u2_wrapper import U2NetWrapper, U2NetPWrapper
 from app.models.samnet.samnet_wrapper import SAMNetWrapper
 from app.config.exp_config import ExperimentConfig
 from app.stats.stat_helpers import (
@@ -44,14 +44,15 @@ SAM_WEIGHTS = "app/models/samnet/SAMNet_with_ImageNet_pretrain.pth"
 
 # List detectors to calculate stats for
 DETECTORS = {
-    "U2Net": U2NetWrapper(weights_path=U2_WEIGHTS),
-    "SAMNet": SAMNetWrapper(weights_path=SAM_WEIGHTS),
-    "AIM": pys.AIM(location=PYSAL_ROOT),
-    "SUN": pys.SUN(location=PYSAL_ROOT),
-    "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
-    "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
-    "BMS": BMSOptimized,
-    "IKN": IttiKoch,
+    # "U2Net": U2NetWrapper(weights_path=U2_WEIGHTS),
+    "U2NetP": U2NetPWrapper(weights_path=U2P_WEIGHTS),
+    # "SAMNet": SAMNetWrapper(weights_path=SAM_WEIGHTS),
+    # "AIM": pys.AIM(location=PYSAL_ROOT),
+    # "SUN": pys.SUN(location=PYSAL_ROOT),
+    # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
+    # "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
+    # "BMS": BMSOptimized,
+    # "IKN": IttiKoch,
 }
 
 # Compute segmentation stats for one image using the given detector
@@ -74,11 +75,11 @@ def compute_stats(detector, img, gt_mask):
 def print_results(stats_list: List[ModelStats]):
     for ms in stats_list:
         print(f"{ms.model} (n={ms.n_images}):")
+        print(f"  dice:      {ms.dice:.4f}")
+        print(f"  iou:       {ms.iou:.4f}")
         print(f"  precision: {ms.precision:.4f}")
         print(f"  recall:    {ms.recall:.4f}")
         print(f"  f1-score:  {ms.f1_score:.4f}")
-        print(f"  iou:       {ms.iou:.4f}")
-        print(f"  dice:      {ms.dice:.4f}")
         print(f"  accuracy:  {ms.accuracy:.4f}")
         print(f"  time (s):  {ms.time:.3f}")
         print()
@@ -100,6 +101,9 @@ def evaluate(cfg: ExperimentConfig):
     # 2) Prepare to record results
     stats_objs: list[ModelStats] = []
     random.seed(42) # Set seed for replicability in other experiments
+    # Separate detectors into gpu/cpu for parallel processing loop
+    gpu_detectors = ["U2Net", "U2NetP", "SAMNet"]
+    cpu_detectors = [name for name in DETECTORS.keys() if name not in gpu_detectors]
 
     # 3) Aggregate stats for each detector
     for name, detector in DETECTORS.items():
@@ -119,7 +123,7 @@ def evaluate(cfg: ExperimentConfig):
 
         # 4) Pool saliency computations for a given detector
         # Process CPU detectors in parallel
-        if not (isinstance(detector, U2NetWrapper) or isinstance(detector, SAMNetWrapper)):
+        if name in cpu_detectors:
             with ThreadPoolExecutor(max_workers=max_workers) as exe:
                 futures = {
                     exe.submit(compute_stats, detector, img, gt_mask): fn
@@ -135,7 +139,7 @@ def evaluate(cfg: ExperimentConfig):
                     pbar.update(1)
                 pbar.close()
         # Process GPU comps sequentially
-        else:
+        elif name in gpu_detectors:
             pbar = tqdm(total=len(sample_data), desc=f"{name}", unit="img")
             for fn, img, gt_mask in sample_data:
                 result = compute_stats(detector, img, gt_mask)
@@ -143,6 +147,8 @@ def evaluate(cfg: ExperimentConfig):
                     stats_list.append(result)
                 pbar.update(1)
             pbar.close()
+        else:
+            print("Key Error: cannot process detector with key {name}.")
 
         # 6) Aggregate stats across validation set
         if stats_list:

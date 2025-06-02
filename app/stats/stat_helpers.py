@@ -5,16 +5,10 @@ import os
 from pycocotools.coco import COCO
 
 def gather_dataset(coco_annotation_file: str, img_dir: str):
-    """
-    Load validation images and binary masks from COCO.
-    coco_annotation_file: path to instances_val2017.json
-    img_dir: path to val2017/ folder containing .jpgs
-    """
-    print(f"Loading COCO annotations from {coco_annotation_file!r}")
+    # Load validation images & binary masks using COCO API
     coco = COCO(coco_annotation_file)
-
     img_ids = coco.getImgIds()  # all validation images
-    print(f"→ Found {len(img_ids)} images in COCO val set.")
+    print(f"Found {len(img_ids)} images in COCO val set.")
 
     dataset = []
     for img_id in tqdm(img_ids, desc="Building COCO dataset", unit="img"):
@@ -70,6 +64,6 @@ def calc_seg_stats(pred: np.ndarray, gt: np.ndarray) -> dict:
     dice = 2 * tp / (2 * tp + fp + fn + 1e-12)
     acc = (tp + tn) / (tp + tn + fp + fn + 1e-12)
     time = 0
-    return {'iou': iou, 'dice': dice, 'time': time,
+    return {'dice': dice, 'iou': iou,  'time': time,
              'precision': prec, 'recall': rec,
              'f1-score': f1, 'accuracy': acc, }
