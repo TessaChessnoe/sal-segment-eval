@@ -21,6 +21,7 @@ from app.config.exp_config import ExperimentConfig
 from app.stats.stat_helpers import (
     gather_dataset,
     normalize_map,
+    compare_models,
     calc_seg_stats)
 
 # Using dataclass avoids storing stats in nested dicts
@@ -36,6 +37,7 @@ class ModelStats:
     f1_score: float
     accuracy: float
 
+FULL_VAL_SET = 5000
 # Paths for pretrained weights & model files
 PYSAL_ROOT = "app/models/pysal"
 U2_WEIGHTS = "app/models/u2net/u2net.pth"
@@ -44,10 +46,10 @@ SAM_WEIGHTS = "app/models/samnet/SAMNet_with_ImageNet_pretrain.pth"
 
 # List detectors to calculate stats for
 DETECTORS = {
-    # "U2Net": U2NetWrapper(weights_path=U2_WEIGHTS),
+    "U2Net": U2NetWrapper(weights_path=U2_WEIGHTS),
     "U2NetP": U2NetPWrapper(weights_path=U2P_WEIGHTS),
-    # "SAMNet": SAMNetWrapper(weights_path=SAM_WEIGHTS),
-    # "AIM": pys.AIM(location=PYSAL_ROOT),
+    "SAMNet": SAMNetWrapper(weights_path=SAM_WEIGHTS),
+    "AIM": pys.AIM(location=PYSAL_ROOT),
     # "SUN": pys.SUN(location=PYSAL_ROOT),
     # "Finegrain": cv2.saliency.StaticSaliencyFineGrained.create(),
     # "SpectralRes": cv2.saliency.StaticSaliencySpectralResidual.create(),
@@ -99,6 +101,7 @@ def evaluate(cfg: ExperimentConfig):
     dataset = gather_dataset(cfg.masks_json, cfg.input_dir)
 
     # 2) Prepare to record results
+    model_metrics = {}
     stats_objs: list[ModelStats] = []
     random.seed(42) # Set seed for replicability in other experiments
     # Separate detectors into gpu/cpu for parallel processing loop
@@ -112,7 +115,7 @@ def evaluate(cfg: ExperimentConfig):
         # 3a) Pick sample size & worker count
         if name in cfg.slow_models:
             # Excessive copies of SUN & AIM overallocate mem
-            max_workers = 2
+            max_workers = 1
             sample_data = random.sample(dataset, cfg.slow_model_n)
         else:
             # Throttle threads to leave some cores free
@@ -174,11 +177,30 @@ def evaluate(cfg: ExperimentConfig):
             )
             # Append to final stats list
             stats_objs.append(ms)
-    # 7) Print aggregated results
+        
+        # 7) NEW: Collect per-image statistics for significance comparisons
+        if stats_list:
+            # Store per-image metrics
+            model_metrics[name] = {
+                'dice': [s['dice'] for s in stats_list],
+                'iou': [s['iou'] for s in stats_list],
+                'n': len(stats_list)
+            }
+    # 8) Print aggregated results
     print_results(stats_objs)
     # Output to csv if enabled
     if (cfg.csv_out):
         results_to_csv(stats_objs, cfg.output_dir, cfg.output_file)
+
+    # 9) NEW: Verify that diff between model metrics is significant
+    comparison_df = compare_models(model_metrics)
+    print("\n=== Statistical Comparisons ===")
+    print(comparison_df.round(4))
+
+    # Save comparisons to CSV
+    if cfg.csv_out:
+        comp_path = os.path.join(cfg.output_dir, "model_comparisons.csv")
+        comparison_df.to_csv(comp_path, index=False)
 
 def main():
     cfg = ExperimentConfig(
@@ -187,10 +209,10 @@ def main():
         output_file = "results.csv",
         masks_json = "data/COCO/annotations/instances_val2017.json", 
         slow_models = {"AIM", "SUN"},
-        slow_model_n = 400,
-        fast_model_n = 2000, 
+        slow_model_n = 500,
+        fast_model_n = 500, 
         leave_free_cores = 2,
-        csv_out = False,
+        csv_out = True,
     )
 
     # Calculate aggregate metrics for each detector

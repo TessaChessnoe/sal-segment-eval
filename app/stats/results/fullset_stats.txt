@@ -1,0 +1,36 @@
+U2Net (n=5000):
+  dice:      0.4902
+  iou:       0.3845
+  precision: 0.7414
+  recall:    0.4506
+  f1-score:  0.4902
+  accuracy:  0.7821
+  time (s):  366.882
+
+U2NetP (n=5000):
+  dice:      0.4356
+  iou:       0.3367
+  precision: 0.7579
+  recall:    0.3821
+  f1-score:  0.4356
+  accuracy:  0.7691
+  time (s):  283.471
+
+SAMNet (n=5000):
+  dice:      0.5681
+  dice:      0.5681
+  iou:       0.4494
+  precision: 0.6880
+  recall:    0.5875
+  f1-score:  0.5681
+  accuracy:  0.7930
+  time (s):  481.037
+
+BMS (n=5000):
+  dice:      0.2051
+  iou:       0.1303
+  precision: 0.3450
+  recall:    0.2141
+  f1-score:  0.2051
+  accuracy:  0.6077
+  time (s):  106.781

@@ -4,6 +4,11 @@ from tqdm import tqdm
 import os
 from pycocotools.coco import COCO
 
+import pandas as pd
+from scipy import stats
+import numpy as np
+from itertools import combinations
+
 def gather_dataset(coco_annotation_file: str, img_dir: str):
     # Load validation images & binary masks using COCO API
     coco = COCO(coco_annotation_file)
@@ -67,3 +72,40 @@ def calc_seg_stats(pred: np.ndarray, gt: np.ndarray) -> dict:
     return {'dice': dice, 'iou': iou,  'time': time,
              'precision': prec, 'recall': rec,
              'f1-score': f1, 'accuracy': acc, }
+
+def compare_models(model_metrics, alpha=0.01, d_thresh=0.5):
+    """Compare models pairwise using paired t-tests and Cohen's d"""
+    comparisons = []
+    
+    # Group models by sample size
+    groups = {}
+    for model, metrics in model_metrics.items():
+        n = metrics['n']
+        groups.setdefault(n, []).append(model)
+    
+    # Compare within each sample group
+    for n, models in groups.items():
+        for model_a, model_b in combinations(models, 2):
+            for metric in ['dice', 'iou']:
+                a_scores = model_metrics[model_a][metric]
+                b_scores = model_metrics[model_b][metric]
+                
+                # Paired t-test
+                t_stat, p_val = stats.ttest_rel(a_scores, b_scores)
+                
+                # Cohen's d calculation
+                diff = np.array(a_scores) - np.array(b_scores)
+                d = np.mean(diff) / np.std(diff, ddof=1)
+                
+                comparisons.append({
+                    'Model A': model_a,
+                    'Model B': model_b,
+                    'Metric': metric,
+                    'T-stat': t_stat,
+                    'p-value': p_val,
+                    "Cohen's d": d,
+                    'Significant': (p_val < alpha) and (abs(d) > d_thresh),
+                    'Sample Size': n
+                })
+    
+    return pd.DataFrame(comparisons)

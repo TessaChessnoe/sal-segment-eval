@@ -69,3 +69,12 @@ SAMNet (n=2000):
   dice:      0.5710
   accuracy:  0.7944
   time (s):  226.317
+
+U2NetP (n=2000):
+  dice:      0.4407
+  iou:       0.3417
+  precision: 0.7563
+  recall:    0.3878
+  f1-score:  0.4407
+  accuracy:  0.7722
+  time (s):  118.806
