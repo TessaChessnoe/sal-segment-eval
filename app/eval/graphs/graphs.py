@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from app.stats.seg_stats import ModelStats
+from app.eval.stats.seg_stats import ModelStats
 import itertools
 import numpy as np
 import os
@@ -198,37 +198,36 @@ def quality_per_time(stats_list):
 def flop_efficiency(stats_list):
     return
 
-## 1) Pareto graph of accuracy vs. time/image
-# acc_time_pareto(stats_list)
-## 2) Measure segmentation performance
-# dice_iou(stats_list)
+# 1) Pareto graph of accuracy vs. time/image
+acc_time_pareto(stats_list)
+# 2) Measure segmentation performance
+dice_iou(stats_list)
 
-## 3) Radar plot of all model metrics
-## Prepare to read in radar plot data
-# OUTPUT_PATH = "app/stats/results/radar_means.csv"
-# os.makedirs("results", exist_ok=True)
+# 3) Radar plot of all model metrics
+# Prepare to read in radar plot data
+radar_output = "app/eval/graphs/csv/radar_means.csv"
+os.makedirs("results", exist_ok=True)
 
-# # Group 1: Deep models
-# df1 = radar_plot(stats_list, selected_models=["SAM-Net", "U^2-Net", "U^2-Net-Small"])
-# # Group 2: Classical
-# df2 = radar_plot(stats_list, selected_models=["BMS", "IttiKoch"])
-# # Group 3: OpenCV
-# df3 = radar_plot(stats_list, selected_models=["FineGrained", "SpectralRes"])
-# # Group 4: Outliers or slow models
-# df4 = radar_plot(stats_list, selected_models=["SUN", "AIM"])
-# radar_means = pd.concat([df1, df2, df3, df4], axis=0, ignore_index=True)
-# # Sort by highest mean score 1st
-# s_radar_means = radar_means.sort_values(by="Mean Score", ascending=False)
-# radar_means.to_csv(OUTPUT_PATH, index=False)
+# Group 1: Deep models
+df1 = radar_plot(stats_list, selected_models=["SAM-Net", "U^2-Net", "U^2-Net-Small"])
+# Group 2: Classical
+df2 = radar_plot(stats_list, selected_models=["BMS", "IttiKoch"])
+# Group 3: OpenCV
+df3 = radar_plot(stats_list, selected_models=["FineGrained", "SpectralRes"])
+# Group 4: Outliers or slow models
+df4 = radar_plot(stats_list, selected_models=["SUN", "AIM"])
+radar_means = pd.concat([df1, df2, df3, df4], axis=0, ignore_index=True)
+# Sort by highest mean score 1st
+s_radar_means = radar_means.sort_values(by="Mean Score", ascending=False)
+radar_means.to_csv(radar_output, index=False)
 
-# # 4) Test raw pixel throughput 
-# res_thru_df = pd.read_csv("app/stats/results/res_thru.csv")
-# res_thru_bars(res_thru_df)
+# 4) Test raw pixel throughput 
+res_thru_df = pd.read_csv("app/eval/graphs/results/res_thru.csv")
+res_thru_bars(res_thru_df)
 
 # 5) Eval quality per second of inference
-OUTPUT_PATH = "app/stats/results/quality_time.csv"
+mp_res_output = "app/eval/graphs/csv/quality_time.csv"
 os.makedirs("results", exist_ok=True)
 
 results = quality_per_time(stats_list)
-results.to_csv(OUTPUT_PATH, index=False)
-
+results.to_csv(mp_res_output, index=False)

@@ -73,8 +73,8 @@ def calc_seg_stats(pred: np.ndarray, gt: np.ndarray) -> dict:
              'precision': prec, 'recall': rec,
              'f1-score': f1, 'accuracy': acc, }
 
-def compare_models(model_metrics, alpha=0.01, d_thresh=0.5):
-    """Compare models pairwise using paired t-tests and Cohen's d"""
+def compare_models(model_metrics, alpha=0.05, d_thresh=0.2):
+    # Compare models pairwise using paired t-tests and Cohen's d
     comparisons = []
     
     # Group models by sample size

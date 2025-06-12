@@ -18,7 +18,7 @@ from app.models.custom_models import BMS, BMSOptimized, IttiKoch
 from app.models.u2net.u2_wrapper import U2NetWrapper, U2NetPWrapper
 from app.models.samnet.samnet_wrapper import SAMNetWrapper
 from app.config.exp_config import ExperimentConfig
-from app.stats.stat_helpers import (
+from app.eval.stats.stat_helpers import (
     gather_dataset,
     normalize_map,
     compare_models,
@@ -205,7 +205,7 @@ def evaluate(cfg: ExperimentConfig):
 def main():
     cfg = ExperimentConfig(
         input_dir = "data/COCO/val2017", 
-        output_dir = "app/stats/results",
+        output_dir = "app/eval/stats/results",
         output_file = "results.csv",
         masks_json = "data/COCO/annotations/instances_val2017.json", 
         slow_models = {"AIM", "SUN"},

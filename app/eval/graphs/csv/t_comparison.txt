@@ -1,0 +1,14 @@
+=== Statistical Comparisons ===
+   Model A Model B Metric  T-stat  p-value  Cohen's d  Significant  Sample Size
+0    U2Net  U2NetP   dice  0.3859   0.6998     0.0173        False          500
+1    U2Net  U2NetP    iou  0.2326   0.8162     0.0104        False          500
+2    U2Net  SAMNet   dice -4.7454   0.0000    -0.2122        True           500
+3    U2Net  SAMNet    iou -4.3302   0.0000    -0.1937        False          500
+4    U2Net     AIM   dice  2.2262   0.0264     0.0996        False          500
+5    U2Net     AIM    iou  3.1754   0.0016     0.1420        False          500
+6   U2NetP  SAMNet   dice -5.1723   0.0000    -0.2313        True           500
+7   U2NetP  SAMNet    iou -4.6619   0.0000    -0.2085        True           500
+8   U2NetP     AIM   dice  1.6409   0.1015     0.0734        False          500
+9   U2NetP     AIM    iou  2.7336   0.0065     0.1223        False          500
+10  SAMNet     AIM   dice  7.7495   0.0000     0.3466        True           500
+11  SAMNet     AIM    iou  8.2642   0.0000     0.3696        True           500

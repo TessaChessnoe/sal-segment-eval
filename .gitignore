@@ -1,11 +1,16 @@
-# Directories:
+# COCO Image Data
 data/
-stats/results
-app/models/pysal_models
-segment_eval.egg-info/
-app/models/pysal
-*/__pycache__/*
 
-# File types
+# Output csv & txt files
+app/eval/stats/results*.csv
+app/eval/stats/results*.txt
+app/eval/graphs/csv*.csv
+app/eval/graphs/csv*.txt
+
+# Model Files
+app/models
 *.pth
 
+# Environment files
+segment_eval.egg-info/
+*/__pycache__/*
