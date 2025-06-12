@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from app.stats.seg_stats import ModelStats
 import itertools
+import numpy as np
+import os
 
 stats_list = [
     ModelStats("U^2-Net-Small", 2000, dice=0.4407, iou=0.3417,
@@ -94,9 +96,139 @@ def dice_iou(stats_list):
     plt.title("Methods Ranked by IOU + DICE")
     plt.xlabel('Method')
     plt.ylabel('Composite Score (IoU + Dice)')
+    # Fit long models by disp. diagonally
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     plt.show()
 
+def radar_plot(stats_list, selected_models=None):
+    # Choose which metrics to show
+    metrics = ["precision", "recall", "f1_score", "iou", "dice", "accuracy"]
+    n_metrics = len(metrics)
+
+    # Angles for radar chart axes
+    angles = np.linspace(0, 2 * np.pi, n_metrics, endpoint=False).tolist()
+    angles += angles[:1]  # to close the loop
+
+    # Set up plot
+    plt.figure(figsize=(7, 7))
+    ax = plt.subplot(111, polar=True)
+
+    # Optional: filter which models to plot
+    if selected_models:
+        stats_list = [ms for ms in stats_list if ms.model in selected_models]
+
+    data = []
+    # Plot each model & get data means
+    for ms in stats_list:
+        values = [getattr(ms, m) for m in metrics]
+        values += values[:1]  # loop to starting angle
+        mean_score = np.mean(values)
+
+        ax.plot(angles, values, label=ms.model)
+        ax.fill(angles, values, alpha=0.1)
+
+        data.append({
+            "Model": ms.model,
+            **{m.capitalize(): getattr(ms, m) for m in metrics},
+            "Mean Score": mean_score
+        })
+
+    # Add labels
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(metrics)
+    ax.set_yticks([0.2, 0.4, 0.6, 0.8])
+    ax.set_yticklabels(["0.2", "0.4", "0.6", "0.8"])
+    ax.set_ylim(0, 1.0)
+
+    plt.title("Model Comparison Across Segmentation Metrics", size=14)
+    plt.legend(loc="upper right", bbox_to_anchor=(1.2, 1.05))
+    plt.tight_layout()
+    plt.show()
+
+    # Export mean score data to df
+    df = pd.DataFrame(data)
+    sorted_df = df.sort_values(by="Mean Score", ascending=False)
+    return sorted_df
+
+def res_thru_bars(df):
+    models = df['Model']
+    mp_per_s = df['MP/s']
+
+    plt.figure(figsize=(9, 5))
+    bars = plt.bar(models, mp_per_s)
+    
+    # Add value labels above bars
+    for bar, score in zip(bars, mp_per_s):
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height + 0.01,
+                 f"{score:.2f}", ha='center', va='bottom', fontsize=8)
+    
+    plt.title("Methods Ranked by MP/s")
+    plt.xlabel('Method')
+    plt.ylabel('MP/s (Megapixels/second)')
+    # Fit long models by disp. diagonally
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.show()
+
+def quality_per_time(stats_list):
+    models = [ms.model for ms in stats_list]
+    q_per_time = [(ms.iou + ms.dice) / (ms.time/ms.n_images)
+                        for ms in stats_list]
+    results = pd.DataFrame(list(zip(models, q_per_time)), columns=['Models', 'Quality/Time'])
+    plt.figure(figsize=(9, 5))
+    bars = plt.bar(models, q_per_time)
+    
+    # Add value labels above bars
+    for bar, score in zip(bars, q_per_time):
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height + 0.01,
+                 f"{score:.2f}", ha='center', va='bottom', fontsize=8)
+    
+    plt.title("Segmentation Quality per Second of Inference")
+    plt.xlabel('Method')
+    plt.ylabel('Composite Score (IoU + Dice / fps)')
+    # Fit long models by disp. diagonally
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.show()
+    return results
+
+def flop_efficiency(stats_list):
+    return
+
+## 1) Pareto graph of accuracy vs. time/image
 # acc_time_pareto(stats_list)
-dice_iou(stats_list)
+## 2) Measure segmentation performance
+# dice_iou(stats_list)
+
+## 3) Radar plot of all model metrics
+## Prepare to read in radar plot data
+# OUTPUT_PATH = "app/stats/results/radar_means.csv"
+# os.makedirs("results", exist_ok=True)
+
+# # Group 1: Deep models
+# df1 = radar_plot(stats_list, selected_models=["SAM-Net", "U^2-Net", "U^2-Net-Small"])
+# # Group 2: Classical
+# df2 = radar_plot(stats_list, selected_models=["BMS", "IttiKoch"])
+# # Group 3: OpenCV
+# df3 = radar_plot(stats_list, selected_models=["FineGrained", "SpectralRes"])
+# # Group 4: Outliers or slow models
+# df4 = radar_plot(stats_list, selected_models=["SUN", "AIM"])
+# radar_means = pd.concat([df1, df2, df3, df4], axis=0, ignore_index=True)
+# # Sort by highest mean score 1st
+# s_radar_means = radar_means.sort_values(by="Mean Score", ascending=False)
+# radar_means.to_csv(OUTPUT_PATH, index=False)
+
+# # 4) Test raw pixel throughput 
+# res_thru_df = pd.read_csv("app/stats/results/res_thru.csv")
+# res_thru_bars(res_thru_df)
+
+# 5) Eval quality per second of inference
+OUTPUT_PATH = "app/stats/results/quality_time.csv"
+os.makedirs("results", exist_ok=True)
+
+results = quality_per_time(stats_list)
+results.to_csv(OUTPUT_PATH, index=False)
+
