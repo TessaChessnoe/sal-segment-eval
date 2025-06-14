@@ -62,7 +62,7 @@ INP_IMG_DIR = "data/COCO/val2017"
 if __name__ == "__main__":
     import pandas as pd
     import cv2
-    from app.stats.stat_helpers import gather_dataset
+    from app.eval.stats.stat_helpers import gather_dataset
 
     # Import custom models & wrappers
     # import pysaliency as pys

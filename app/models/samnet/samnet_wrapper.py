@@ -88,15 +88,23 @@ class SAMNetWrapper:
             out = self.model(inp)
             # 0th index of model output is the logits
             if isinstance(out, (list, tuple)):
-                sal_logits = out[0]
+                sal_logits = out[0][:, 0:1]  # shape: (1, 1, h, w)
             else:
-                sal_logits = out
+                sal_logits = out[:, 0:1]     # shape: (1, 1, h, w)
 
         # 3) Postprocess: resize to original dims
         sal = SAMNetWrapper.postprocess_output(self, sal_logits, (h, w))
 
+
         # 4) Check if the result is non-trivial (e.g. not all zeros)
         if np.allclose(sal, 0.0):
             return False, None
+        
+        # DEBUG: confirm saliency maps are the correct type & dims
+        assert sal.ndim == 2, f"Expected 2D saliency map, got shape: {sal.shape}"
+        assert sal.dtype == np.float32, f"Expected float32 saliency map, got {sal.dtype}"
+        assert np.all((0.0 <= sal) & (sal <= 1.0)), "Saliency map not in [0, 1]"
+
         return True, sal
+    
     

@@ -8,3 +8,13 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["app", "app.*"]
+
+[project]
+name = "sal-segment-eval"
+version = "0.1.0"
+description = "Saliency segmentation evaluation tools"
+authors = [
+  { name = "Trevor Chessnoe" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
