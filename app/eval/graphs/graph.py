@@ -37,42 +37,42 @@ stats_list = [
 
 def acc_time_pareto(stats_list):
     # 1) Get x-vals, y-vals, and model labels
-    times = [round(ms.time / ms.n_images, 4) for ms in stats_list] # Get FPS from total time
+    fps_vals = [round(ms.n_images / ms.time, 4) for ms in stats_list] # Get FPS from total time
     accs = [ms.accuracy for ms in stats_list]
     names = [ms.model for ms in stats_list]
 
     # 2) Glue values to model name & sort points (ASC)
-    points = list(zip(times, accs, names))
-    points.sort()
+    points = list(zip(fps_vals, accs, names))
+    points.sort(reverse=True)
 
     pareto = []
     max_acc = -1
-    for t, acc, name in points:
-        if acc > max_acc:
-            pareto.append((t, acc, name))
+    for fps, acc, name in points:
+        if acc >= max_acc:
+            pareto.append((fps, acc, name))
             max_acc = acc
 
     # Separate for plotting
-    ptimes = [t for t, a, n in pareto]
-    paccs = [a for t, a, n in pareto]
-    pnames = [n for t, a, n in pareto]
+    pfps = [f for f, a, n in pareto]
+    paccs = [a for f, a, n in pareto]
+    pnames = [n for f, a, n in pareto]
 
     plt.figure(figsize=(7,5))
-    plt.scatter(times, accs, label="All models", alpha=0.5)
-    plt.plot(ptimes, paccs, color="red", label="Pareto frontier", linewidth=2, marker="o")
+    plt.scatter(fps_vals, accs, label="All models", alpha=0.5)
+    plt.plot(pfps, paccs, color="red", label="Pareto frontier", linewidth=2, marker="o")
 
     # Optional: annotate graph with model names
-    for t, a, n in zip(times, accs, names):
+    for f, a, n in zip(fps_vals, accs, names):
         # 1. Label all points (default = non-bold, grayish)
         if n not in pnames:
-            plt.text(t * 1.01, a, n, fontsize=8, alpha=0.6, color='gray')
+            plt.text(f * 1.01, a, n, fontsize=8, alpha=0.6, color='gray')
         # 2. Highlight Pareto frontier pts in bold
         else:
-            plt.text(t * 1.01, a, n, fontsize=8, weight='bold', color='black')
+            plt.text(f * 1.01, a, n, fontsize=8, weight='bold', color='black')
 
-    plt.xlabel("Time/image (fps)")
+    plt.xlabel("segmentations/s (fps)")
     plt.ylabel("Accuracy")
-    plt.title("Pareto Frontier: Accuracy vs. Inference Time")
+    plt.title("Pareto Frontier: Framerate vs. Accuracy")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -188,7 +188,7 @@ def quality_per_time(stats_list):
     
     plt.title("Segmentation Quality per Second of Inference")
     plt.xlabel('Method')
-    plt.ylabel('Composite Score (IoU + Dice / fps)')
+    plt.ylabel('Quality Score (IoU + Dice / segmentations*s^-1)')
     # Fit long models by disp. diagonally
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
@@ -198,36 +198,32 @@ def quality_per_time(stats_list):
 def flop_efficiency(stats_list):
     return
 
-# 1) Pareto graph of accuracy vs. time/image
-acc_time_pareto(stats_list)
+# # 1) Pareto graph of accuracy vs. time/image
+# acc_time_pareto(stats_list)
 # 2) Measure segmentation performance
-dice_iou(stats_list)
+# dice_iou(stats_list)
 
-# 3) Radar plot of all model metrics
-# Prepare to read in radar plot data
-radar_output = "app/eval/graphs/csv/radar_means.csv"
-os.makedirs("results", exist_ok=True)
+# # 3) Radar plot of all model metrics
+# # Prepare to read in radar plot data
+# radar_output = "app/eval/graphs/csv/radar_means.csv"
+# os.makedirs("results", exist_ok=True)
 
-# Group 1: Deep models
-df1 = radar_plot(stats_list, selected_models=["SAM-Net", "U^2-Net", "U^2-Net-Small"])
-# Group 2: Classical
-df2 = radar_plot(stats_list, selected_models=["BMS", "IttiKoch"])
-# Group 3: OpenCV
-df3 = radar_plot(stats_list, selected_models=["FineGrained", "SpectralRes"])
-# Group 4: Outliers or slow models
-df4 = radar_plot(stats_list, selected_models=["SUN", "AIM"])
-radar_means = pd.concat([df1, df2, df3, df4], axis=0, ignore_index=True)
-# Sort by highest mean score 1st
-s_radar_means = radar_means.sort_values(by="Mean Score", ascending=False)
-radar_means.to_csv(radar_output, index=False)
+# # Group 1: Deep models
+# df1 = radar_plot(stats_list, selected_models=["SAM-Net", "U^2-Net", "U^2-Net-Small"])
+# # Group 2: Classical
+# df2 = radar_plot(stats_list, selected_models=["BMS", "IttiKoch"])
+# # Group 3: OpenCV
+# df3 = radar_plot(stats_list, selected_models=["FineGrained", "SpectralRes"])
+# # Group 4: Outliers or slow models
+# df4 = radar_plot(stats_list, selected_models=["SUN", "AIM"])
+# radar_means = pd.concat([df1, df2, df3, df4], axis=0, ignore_index=True)
+# # Sort by highest mean score 1st
+# s_radar_means = radar_means.sort_values(by="Mean Score", ascending=False)
+# radar_means.to_csv(radar_output, index=False)
 
-# 4) Test raw pixel throughput 
-res_thru_df = pd.read_csv("app/eval/graphs/results/res_thru.csv")
-res_thru_bars(res_thru_df)
+# # 4) Test raw pixel throughput 
+# res_thru_df = pd.read_csv("app/eval/graphs/results/res_thru.csv")
+# res_thru_bars(res_thru_df)
 
 # 5) Eval quality per second of inference
-mp_res_output = "app/eval/graphs/csv/quality_time.csv"
-os.makedirs("results", exist_ok=True)
-
 results = quality_per_time(stats_list)
-results.to_csv(mp_res_output, index=False)
